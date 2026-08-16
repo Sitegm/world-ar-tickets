@@ -288,6 +288,12 @@
           <input type="tel" id="clientPhone" placeholder="(61) 99908-9125" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
         </div>
 
+        <!-- CAMPO DE ENDEREÇO ADICIONADO -->
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Endereço Completo</label>
+          <input type="text" id="clientAddress" placeholder="Rua, número, quadra, complemento - Bairro" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
+        </div>
+
         <div>
           <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Tipo de Serviço</label>
           <select id="serviceType" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
@@ -336,11 +342,13 @@
       const ticketData = {
         clientName: document.getElementById('clientName').value,
         clientPhone: document.getElementById('clientPhone').value,
+        address: document.getElementById('clientAddress').value, // <--- Enviando para a API/Painel
         serviceType: document.getElementById('serviceType').value,
         description: document.getElementById('serviceDesc').value
       };
 
       try {
+        // Envia para o backend para salvar no banco de dados / painel admin
         const response = await fetch('/api/tickets', {
           method: 'POST',
           headers: { 
@@ -351,13 +359,15 @@
 
         if (!response.ok) throw new Error('Falha no salvamento');
 
-        // Formatação limpa do texto para enviar via WhatsApp sem caracteres estranhos
+        // Formatação da mensagem com o Endereço incluído para o WhatsApp
         const text = `*NOVO CHAMADO - WORLD AR*%0A%0A` +
                      `*Nome:* ${encodeURIComponent(ticketData.clientName)}%0A` +
                      `*Telefone:* ${encodeURIComponent(ticketData.clientPhone)}%0A` +
+                     `*Endereço:* ${encodeURIComponent(ticketData.address)}%0A` +
                      `*Tipo de Servico:* ${encodeURIComponent(ticketData.serviceType)}%0A` +
                      `*Observacoes:* ${encodeURIComponent(ticketData.description || 'Nenhuma')}`;
 
+        // Abre a janela do WhatsApp com os dados preenchidos
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
         
         alert('Chamado registrado com sucesso!');

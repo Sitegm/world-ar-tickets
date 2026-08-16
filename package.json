@@ -1,7 +1,7 @@
-﻿{
+{
   "name": "world-chamados",
   "version": "1.0.0",
-  "description": "Sistema de Chamados World - Climatização com mais de 30 anos de mercado",
+  "description": "Sistema de Chamados World - Climatizacao com mais de 30 anos de mercado",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
