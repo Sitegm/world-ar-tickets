@@ -1,193 +1,111 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Admin | World Ar</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #1e293b; margin-bottom: 20px; }
-    .btn { background: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-    .btn:hover { background: #4338ca; }
-    .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; margin-left: 6px; }
-    .btn-delete:hover { background: #dc2626; }
-    
-    /* CARTÕES DOS CONTADORES */
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-    .card { background: #020617; border: 1px solid #1e293b; padding: 15px; border-radius: 12px; }
-    .card-title { color: #94a3b8; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-    .card-value { font-size: 28px; font-weight: bold; margin-top: 5px; }
-    .pending { color: #fbbf24; border-color: rgba(251, 191, 36, 0.2); }
-    .in-progress { color: #60a5fa; border-color: rgba(96, 165, 250, 0.2); }
-    .completed { color: #34d399; border-color: rgba(52, 211, 153, 0.2); }
-    
-    /* TABELA */
-    .table-container { background: #020617; border: 1px solid #1e293b; border-radius: 12px; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-    th { background: #0f172a; padding: 12px; color: #94a3b8; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #1e293b; }
-    td { padding: 12px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); }
-    tr:hover { background: rgba(30, 41, 59, 0.3); }
-    
-    /* BADGES & SELECT */
-    .badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: bold; display: inline-block; }
-    .badge-pending { background: #451a03; color: #fbbf24; border: 1px solid #78350f; }
-    .badge-progress { background: #172554; color: #60a5fa; border: 1px solid #1e40af; }
-    .badge-completed { background: #022c22; color: #34d399; border: 1px solid #065f46; }
-    select { background: #0f172a; color: #f8fafc; border: 1px solid #334155; padding: 5px; border-radius: 6px; }
-    .actions-cell { display: flex; align-items: center; justify-content: center; gap: 4px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h2>Painel de Gerenciamento de Chamados</h2>
-      <button onclick="loadTickets()" class="btn">Atualizar Lista</button>
-    </div>
+<script>
+  async function loadTickets() {
+    try {
+      const res = await fetch('/api/tickets');
+      const tickets = await res.json();
+      const tbody = document.getElementById('ticketsTable');
 
-    <!-- CARTÕES DE CONTADORES -->
-    <div class="cards-grid">
-      <div class="card">
-        <div class="card-title">Total de Chamados</div>
-        <div id="countTotal" class="card-value">0</div>
-      </div>
-      <div class="card pending">
-        <div class="card-title" style="color:#fbbf24">Pendentes</div>
-        <div id="countPending" class="card-value">0</div>
-      </div>
-      <div class="card in-progress">
-        <div class="card-title" style="color:#60a5fa">Em Andamento</div>
-        <div id="countInProgress" class="card-value">0</div>
-      </div>
-      <div class="card completed">
-        <div class="card-title" style="color:#34d399">Concluídos</div>
-        <div id="countCompleted" class="card-value">0</div>
-      </div>
-    </div>
-
-    <!-- TABELA DE CHAMADOS -->
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Telefone</th>
-            <th>Endereço</th>
-            <th>Serviço</th>
-            <th>Observações</th>
-            <th>Status</th>
-            <th style="text-align: center;">Ações</th>
-          </tr>
-        </thead>
-        <tbody id="ticketsTable">
-          <tr>
-            <td colspan="8" style="text-align: center; color: #64748b;">Carregando chamados...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script>
-    async function loadTickets() {
-      try {
-        const res = await fetch('/api/tickets');
-        const tickets = await res.json();
-        const tbody = document.getElementById('ticketsTable');
-
-        if (!Array.isArray(tickets)) {
-          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ef4444;">Erro ao carregar dados do servidor.</td></tr>`;
-          return;
-        }
-
-        // Atualizar Contadores
-        const pending = tickets.filter(t => t.status === 'PENDING').length;
-        const inProgress = tickets.filter(t => t.status === 'IN_PROGRESS').length;
-        const completed = tickets.filter(t => t.status === 'COMPLETED').length;
-
-        document.getElementById('countTotal').innerText = tickets.length;
-        document.getElementById('countPending').innerText = pending;
-        document.getElementById('countInProgress').innerText = inProgress;
-        document.getElementById('countCompleted').innerText = completed;
-        
-        if (tickets.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #64748b;">Nenhum chamado encontrado.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = tickets.map(t => {
-          let statusBadge = '';
-          if (t.status === 'PENDING') statusBadge = `<span class="badge badge-pending">Pendente</span>`;
-          else if (t.status === 'IN_PROGRESS') statusBadge = `<span class="badge badge-progress">Em Andamento</span>`;
-          else statusBadge = `<span class="badge badge-completed">Concluído</span>`;
-
-          return `
-            <tr>
-              <td style="font-family: monospace; color: #94a3b8;">#${t.id}</td>
-              <td style="font-weight: bold; color: #fff;">${t.clientName}</td>
-              <td>${t.clientPhone}</td>
-              <td style="color: #cbd5e1;">${t.address || '-'}</td>
-              <td style="color: #38bdf8;">${t.serviceType}</td>
-              <td style="color: #94a3b8; font-size: 12px;">${t.description || '-'}</td>
-              <td>${statusBadge}</td>
-              <td>
-                <div class="actions-cell">
-                  <select onchange="updateStatus(${t.id}, this.value)">
-                    <option value="" disabled selected>Status</option>
-                    <option value="PENDING">Pendente</option>
-                    <option value="IN_PROGRESS">Em Andamento</option>
-                    <option value="COMPLETED">Concluído</option>
-                  </select>
-                  <button class="btn-delete" onclick="deleteTicket(${t.id})">Apagar</button>
-                </div>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      } catch (err) {
-        console.error('Erro na requisição:', err);
+      if (!Array.isArray(tickets)) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ef4444;">Erro ao carregar dados do servidor.</td></tr>`;
+        return;
       }
-    }
 
-    async function updateStatus(id, newStatus) {
-      try {
-        const res = await fetch(`/api/tickets/${id}/status`, {
+      // Atualizar Contadores
+      const pending = tickets.filter(t => t.status === 'PENDING').length;
+      const inProgress = tickets.filter(t => t.status === 'IN_PROGRESS').length;
+      const completed = tickets.filter(t => t.status === 'COMPLETED').length;
+
+      document.getElementById('countTotal').innerText = tickets.length;
+      document.getElementById('countPending').innerText = pending;
+      document.getElementById('countInProgress').innerText = inProgress;
+      document.getElementById('countCompleted').innerText = completed;
+      
+      if (tickets.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #64748b;">Nenhum chamado encontrado.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = tickets.map(t => {
+        let statusBadge = '';
+        if (t.status === 'PENDING') statusBadge = `<span class="badge badge-pending">Pendente</span>`;
+        else if (t.status === 'IN_PROGRESS') statusBadge = `<span class="badge badge-progress">Em Andamento</span>`;
+        else statusBadge = `<span class="badge badge-completed">Concluído</span>`;
+
+        return `
+          <tr>
+            <td style="font-family: monospace; color: #94a3b8;">#${t.id}</td>
+            <td style="font-weight: bold; color: #fff;">${t.clientName}</td>
+            <td>${t.clientPhone}</td>
+            <td style="color: #cbd5e1;">${t.address || '-'}</td>
+            <td style="color: #38bdf8;">${t.serviceType}</td>
+            <td style="color: #94a3b8; font-size: 12px;">${t.description || '-'}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="actions-cell">
+                <select onchange="updateStatus(${t.id}, this.value)">
+                  <option value="" disabled selected>Alterar Status</option>
+                  <option value="PENDING" ${t.status === 'PENDING' ? 'disabled' : ''}>Pendente</option>
+                  <option value="IN_PROGRESS" ${t.status === 'IN_PROGRESS' ? 'disabled' : ''}>Em Andamento</option>
+                  <option value="COMPLETED" ${t.status === 'COMPLETED' ? 'disabled' : ''}>Concluído</option>
+                </select>
+                <button class="btn-delete" onclick="deleteTicket(${t.id})">Apagar</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } catch (err) {
+      console.error('Erro na requisição:', err);
+    }
+  }
+
+  async function updateStatus(id, newStatus) {
+    if (!newStatus) return;
+
+    try {
+      // Testando ambas as rotas comuns do backend (patch de status ou patch direto do ticket)
+      let res = await fetch(`/api/tickets/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!res.ok) {
+        res = await fetch(`/api/tickets/${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: newStatus })
         });
-        
+      }
+      
+      if (res.ok) {
+        await loadTickets();
+      } else {
+        alert('Erro ao atualizar status. Verifique as rotas do servidor.');
+      }
+    } catch (err) {
+      console.error('Erro ao atualizar status:', err);
+      alert('Erro na requisição de atualização.');
+    }
+  }
+
+  async function deleteTicket(id) {
+    if (confirm(`Tem certeza que deseja apagar o chamado #${id}?`)) {
+      try {
+        const res = await fetch(`/api/tickets/${id}`, {
+          method: 'DELETE'
+        });
+
         if (res.ok) {
-          loadTickets();
+          await loadTickets();
         } else {
-          alert('Erro ao atualizar status.');
+          alert('Erro ao excluir chamado.');
         }
       } catch (err) {
         alert('Erro na requisição.');
       }
     }
+  }
 
-    async function deleteTicket(id) {
-      if (confirm(`Tem certeza que deseja apagar o chamado #${id}?`)) {
-        try {
-          const res = await fetch(`/api/tickets/${id}`, {
-            method: 'DELETE'
-          });
-
-          if (res.ok) {
-            loadTickets();
-          } else {
-            alert('Erro ao excluir chamado.');
-          }
-        } catch (err) {
-          alert('Erro na requisição.');
-        }
-      }
-    }
-
-    loadTickets();
-  </script>
-</body>
-</html>
+  loadTickets();
+</script>
