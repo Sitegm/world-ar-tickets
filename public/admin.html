@@ -3,56 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Administrativo - Chamados World</title>
+  <title>World Climatização - Painel de Chamados</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    th { background-color: #0066cc; color: white; }
-    tr:nth-child(even) { background-color: #f2f2f2; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f7f6; color: #333; padding: 25px; }
+    .header { display: flex; justify-content: space-between; align-items: center; background: #0052d4; color: white; padding: 20px 30px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 22px; font-weight: 700; }
+    .header span { font-size: 14px; opacity: 0.9; }
+    .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: left; min-width: 800px; }
+    th { background: #f8f9fa; color: #555; font-weight: 600; padding: 14px; border-bottom: 2px solid #e9ecef; font-size: 14px; }
+    td { padding: 14px; border-bottom: 1px solid #e9ecef; font-size: 14px; color: #444; vertical-align: middle; }
+    tr:hover { background-color: #f8f9fa; }
+    .badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+    .badge-pendente { background: #fff3cd; color: #856404; }
+    .badge-atendimento { background: #cce5ff; color: #004085; }
+    .badge-concluido { background: #d4edda; color: #155724; }
+    .badge-cancelado { background: #f8d7da; color: #721c24; }
+    select.status-select { padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; cursor: pointer; background: white; }
+    .btn-refresh { background: white; color: #0052d4; border: none; padding: 8px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+    .btn-refresh:hover { background: #e6f0ff; }
   </style>
 </head>
 <body>
-  <h2>Painel de Chamados Registrados</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Data</th>
-        <th>Cliente</th>
-        <th>Telefone</th>
-        <th>Endereço</th>
-        <th>Serviço</th>
-        <th>Descrição</th>
-      </tr>
-    </thead>
-    <tbody id="ticketsTable">
-    </tbody>
-  </table>
+
+  <div class="header">
+    <div>
+      <h1>World Climatização</h1>
+      <span>Painel Administrativo de Chamados</span>
+    </div>
+    <button class="btn-refresh" onclick="loadTickets()">🔄 Atualizar</button>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Data/Hora</th>
+          <th>Cliente</th>
+          <th>WhatsApp</th>
+          <th>Endereço</th>
+          <th>Serviço</th>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="ticketsList">
+        <tr>
+          <td colspan="9" style="text-align: center; color: #888;">Carregando chamados...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <script>
     async function loadTickets() {
-      const res = await fetch('/api/tickets');
-      const tickets = await res.json();
-      const tbody = document.getElementById('ticketsTable');
-      tbody.innerHTML = '';
+      try {
+        const res = await fetch('/api/tickets');
+        const tickets = await res.json();
+        const tbody = document.getElementById('ticketsList');
+        tbody.innerHTML = '';
 
-      tickets.forEach(t => {
-        const tr = document.createElement('tr');
-        const dateFormatted = new Date(t.createdAt).toLocaleString('pt-BR');
-        tr.innerHTML = `
-          <td>${t.id}</td>
-          <td>${dateFormatted}</td>
-          <td>${t.clientName}</td>
-          <td>${t.clientPhone}</td>
-          <td>${t.address || '-'}</td>
-          <td>${t.serviceType}</td>
-          <td>${t.description || '-'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+        if (!tickets || tickets.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #888;">Nenhum chamado encontrado.</td></tr>';
+          return;
+        }
+
+        tickets.forEach(ticket => {
+          const date = new Date(ticket.createdAt).toLocaleString('pt-BR');
+          let badgeClass = 'badge-pendente';
+          if (ticket.status === 'Em Atendimento') badgeClass = 'badge-atendimento';
+          if (ticket.status === 'Concluído') badgeClass = 'badge-concluido';
+          if (ticket.status === 'Cancelado') badgeClass = 'badge-cancelado';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>#${ticket.id}</strong></td>
+            <td>${date}</td>
+            <td><strong>${ticket.clientName}</strong></td>
+            <td><a href="https://wa.me/55${ticket.clientPhone.replace(/\D/g, '')}" target="_blank" style="color: #0052d4; text-decoration: none; font-weight: 600;">📱 ${ticket.clientPhone}</a></td>
+            <td>${ticket.address || '<span style="color:#aaa;">Não informado</span>'}</td>
+            <td>${ticket.serviceType}</td>
+            <td>${ticket.description || '-'}</td>
+            <td><span class="badge ${badgeClass}">${ticket.status}</span></td>
+            <td>
+              <select class="status-select" onchange="updateStatus(${ticket.id}, this.value)">
+                <option value="Pendente" ${ticket.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                <option value="Em Atendimento" ${ticket.status === 'Em Atendimento' ? 'selected' : ''}>Em Atendimento</option>
+                <option value="Concluído" ${ticket.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                <option value="Cancelado" ${ticket.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+              </select>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        document.getElementById('ticketsList').innerHTML = '<tr><td colspan="9" style="text-align: center; color: red;">Erro ao carregar os chamados.</td></tr>';
+      }
     }
 
+    async function updateStatus(id, newStatus) {
+      try {
+        const res = await fetch(`/api/tickets/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        if (res.ok) {
+          loadTickets();
+        } else {
+          alert('Erro ao atualizar o status do chamado.');
+        }
+      } catch (err) {
+        alert('Erro de conexão ao atualizar status.');
+      }
+    }
+
+    // Carrega automaticamente ao abrir a página
     loadTickets();
   </script>
 </body>
