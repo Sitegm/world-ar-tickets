@@ -47,6 +47,40 @@ app.get('/api/tickets', async (req, res) => {
   }
 });
 
+// API para atualizar status do chamado
+app.patch('/api/tickets/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedTicket = await prisma.ticket.update({
+      where: { id: Number(id) },
+      data: { status }
+    });
+
+    return res.status(200).json(updatedTicket);
+  } catch (error) {
+    console.error('Erro ao atualizar status:', error);
+    return res.status(500).json({ error: 'Erro interno ao atualizar status do chamado.' });
+  }
+});
+
+// API para apagar chamado
+app.delete('/api/tickets/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.ticket.delete({
+      where: { id: Number(id) }
+    });
+
+    return res.status(200).json({ message: 'Chamado excluído com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao excluir chamado:', error);
+    return res.status(500).json({ error: 'Erro interno ao excluir chamado.' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
