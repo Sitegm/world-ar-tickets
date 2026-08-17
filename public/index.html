@@ -3,70 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World Climatização - Abrir Chamado Técnico</title>
+  <title>World Climatização — Soluções em Ar Condicionado & Climatização</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f4f7f6; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .container { background: #ffffff; width: 100%; max-width: 550px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: hidden; }
-    .header { background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc); color: #fff; padding: 30px 20px; text-align: center; }
-    .header h1 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
-    .header p { font-size: 14px; opacity: 0.9; }
-    form { padding: 30px 25px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
+
+    /* Topbar & Header */
+    header { background: #0f172a; color: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .logo-container h1 { font-size: 22px; color: #38bdf8; font-weight: 800; letter-spacing: 0.5px; }
+    .logo-container p { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+    nav a { color: #f1f5f9; text-decoration: none; margin-left: 20px; font-weight: 500; font-size: 14px; transition: color 0.2s; }
+    nav a:hover { color: #38bdf8; }
+    .btn-nav { background: #0284c7; color: white !important; padding: 8px 16px; border-radius: 6px; font-weight: 600; }
+    .btn-nav:hover { background: #0369a1; }
+
+    /* Hero Banner */
+    .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 80px 5%; text-align: center; }
+    .hero h2 { font-size: 38px; font-weight: 800; margin-bottom: 16px; color: #ffffff; }
+    .hero p { font-size: 18px; color: #cbd5e1; max-width: 700px; margin: 0 auto 30px auto; }
+    .hero-badges { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+    .badge-item { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px; font-size: 14px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
+
+    /* Container Principal */
+    .section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+    .section-title { text-align: center; font-size: 28px; color: #0f172a; margin-bottom: 40px; position: relative; font-weight: 700; }
+    .section-title::after { content: ''; width: 60px; height: 4px; background: #0284c7; display: block; margin: 10px auto 0 auto; border-radius: 2px; }
+
+    /* Grid de Serviços */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+    .service-card { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; }
+    .service-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); }
+    .service-icon { font-size: 36px; margin-bottom: 15px; display: inline-block; }
+    .service-card h3 { font-size: 20px; color: #0f172a; margin-bottom: 10px; }
+    .service-card p { font-size: 14px; color: #64748b; }
+
+    /* Quem Somos */
+    .about-box { background: white; border-radius: 12px; padding: 40px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    @media (max-width: 768px) { .about-box { grid-template-columns: 1fr; } }
+    .about-text h3 { font-size: 24px; color: #0f172a; margin-bottom: 15px; }
+    .about-text p { color: #475569; margin-bottom: 15px; font-size: 15px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; }
+    .stat-card { background: #f1f5f9; padding: 20px; border-radius: 8px; }
+    .stat-number { font-size: 32px; font-weight: 800; color: #0284c7; }
+    .stat-label { font-size: 13px; color: #64748b; font-weight: 600; }
+
+    /* Seção do Formulário de Chamado */
+    .ticket-section { background: #f1f5f9; padding: 60px 5%; }
+    .form-container { background: white; max-width: 650px; margin: 0 auto; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
     .form-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #444; }
-    input, select, textarea { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; transition: border-color 0.3s; }
-    input:focus, select:focus, textarea:focus { border-color: #0052d4; outline: none; }
-    button { background: #0052d4; color: #ffffff; border: none; padding: 14px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.3s; }
-    button:hover { background: #003ab7; }
-    .footer { text-align: center; padding: 15px; font-size: 12px; color: #777; background: #fafafa; border-top: 1px solid #eee; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #334155; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; background: #f8fafc; transition: border-color 0.2s, background 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #0284c7; background: #fff; }
+    .btn-submit { background: #0284c7; color: white; border: none; padding: 14px; width: 100%; font-size: 16px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .btn-submit:hover { background: #0369a1; }
+
+    /* Rodapé */
+    footer { background: #0f172a; color: #94a3b8; padding: 40px 5% 20px 5%; text-align: center; font-size: 14px; border-top: 1px solid #1e293b; }
+    footer strong { color: #f1f5f9; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <h1>World Climatização</h1>
-      <p>Abertura de Chamado Técnico</p>
+  <!-- Topbar -->
+  <header>
+    <div class="logo-container">
+      <h1>WORLD CLIMATIZAÇÃO</h1>
+      <p>Mais de 30 anos de tradição</p>
     </div>
+    <nav>
+      <a href="#servicos">Serviços</a>
+      <a href="#sobre">A Empresa</a>
+      <a href="#chamado" class="btn-nav">Abrir Chamado</a>
+    </nav>
+  </header>
 
-    <form id="ticketForm">
-      <div class="form-group">
-        <label for="clientName">Nome Completo</label>
-        <input type="text" id="clientName" placeholder="Digite seu nome" required>
-      </div>
-
-      <div class="form-group">
-        <label for="clientPhone">WhatsApp / Telefone</label>
-        <input type="tel" id="clientPhone" placeholder="(00) 00000-0000" required>
-      </div>
-
-      <div class="form-group">
-        <label for="address">Endereço Completo</label>
-        <input type="text" id="address" placeholder="Rua, número, bairro e cidade" required>
-      </div>
-
-      <div class="form-group">
-        <label for="serviceType">Tipo de Serviço</label>
-        <select id="serviceType" required>
-          <option value="">Selecione o serviço...</option>
-          <option value="Instalação">Instalação</option>
-          <option value="Manutenção / Conserto">Manutenção / Conserto</option>
-          <option value="Higienização">Higienização</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="description">Descrição do Problema</label>
-        <textarea id="description" rows="4" placeholder="Descreva brevemente o que está acontecendo..."></textarea>
-      </div>
-
-      <button type="submit">Enviar Chamado</button>
-    </form>
-
-    <div class="footer">
-      World Climatização — Mais de 30 anos de excelência
+  <!-- Banner Comercial -->
+  <section class="hero">
+    <h2>Especialistas em Conforto Térmico & Climatização</h2>
+    <p>Atendimento residencial, comercial e industrial com excelência, agilidade e garantia de serviço.</p>
+    <div class="hero-badges">
+      <div class="badge-item">❄️ Instalação & Manutenção</div>
+      <div class="badge-item">🛡️ Equipe Qualificada</div>
+      <div class="badge-item">⭐ +30 Anos no Mercado</div>
     </div>
-  </div>
+  </section>
+
+  <!-- Nossos Serviços -->
+  <section class="section" id="servicos">
+    <h2 class="section-title">Nossos Serviços</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🛠️</div>
+        <h3>Instalação Especializada</h3>
+        <p>Projetos e instalação de equipamentos de ar condicionado de todos os portes e marcas com máxima eficiência energética.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔧</div>
+        <h3>Manutenção Preventiva e Corretiva</h3>
+        <p>Diagnóstico preciso e conserto ágil para garantir o pleno funcionamento do seu sistema sem surpresas.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <h3>Higienização Química Antibacteriana</h3>
+        <p>Limpeza profunda do sistema para eliminação de fungos, bactérias e melhora direta da qualidade do ar respirado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quem Somos -->
+  <section class="section" id="sobre">
+    <div class="about-box">
+      <div class="about-text">
+        <h3>Tradição e Compromisso com o Cliente</h3>
+        <p>A World Climatização atua há mais de 30 anos oferecendo soluções completas em sistemas de ar condicionado e climatização de ambientes.</p>
+        <p>Nossa missão é entregar atendimento transparente, suporte técnico ágil e execução impecável para residências, escritórios e indústrias.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">+30</div>
+          <div class="stat-label">Anos de História</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Garantia Técnica</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulário de Abertura de Chamado -->
+  <section class="ticket-section" id="chamado">
+    <h2 class="section-title">Abrir Chamado Técnico</h2>
+    <div class="form-container">
+      <form id="ticketForm">
+        <div class="form-group">
+          <label for="clientName">Nome Completo</label>
+          <input type="text" id="clientName" placeholder="Ex: Gabriel Mendonça" required>
+        </div>
+
+        <div class="form-group">
+          <label for="clientPhone">WhatsApp / Telefone</label>
+          <input type="tel" id="clientPhone" placeholder="(21) 90000-0000" required>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Endereço Completo</label>
+          <input type="text" id="address" placeholder="Rua, número, bairro e cidade" required>
+        </div>
+
+        <div class="form-group">
+          <label for="serviceType">Tipo de Serviço</label>
+          <select id="serviceType" required>
+            <option value="">Selecione o serviço...</option>
+            <option value="Instalação">Instalação</option>
+            <option value="Manutenção / Conserto">Manutenção / Conserto</option>
+            <option value="Higienização">Higienização</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descrição da Solicitação / Problema</label>
+          <textarea id="description" rows="4" placeholder="Descreva o que está acontecendo com o equipamento..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Enviar Solicitação de Chamado</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    <p><strong>World Climatização</strong> — Excelência em Serviços Térmicos</p>
+    <p style="margin-top: 8px; font-size: 12px;">© Todos os direitos reservados.</p>
+  </footer>
 
   <script>
     document.getElementById('ticketForm').addEventListener('submit', async (e) => {
@@ -87,7 +196,7 @@
         });
 
         if (res.ok) {
-          alert('Chamado aberto com sucesso! Nossa equipe entrará em contato.');
+          alert('Chamado enviado com sucesso! Nossa equipe entrará em contato em breve.');
           document.getElementById('ticketForm').reset();
         } else {
           alert('Erro ao enviar o chamado. Tente novamente.');
