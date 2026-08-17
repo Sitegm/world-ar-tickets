@@ -1,210 +1,383 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World Climatização — Soluções em Ar Condicionado & Climatização</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>World Ar | Soluções em Climatização</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
-
-    /* Topbar & Header */
-    header { background: #0f172a; color: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .logo-container h1 { font-size: 22px; color: #38bdf8; font-weight: 800; letter-spacing: 0.5px; }
-    .logo-container p { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-    nav a { color: #f1f5f9; text-decoration: none; margin-left: 20px; font-weight: 500; font-size: 14px; transition: color 0.2s; }
-    nav a:hover { color: #38bdf8; }
-    .btn-nav { background: #0284c7; color: white !important; padding: 8px 16px; border-radius: 6px; font-weight: 600; }
-    .btn-nav:hover { background: #0369a1; }
-
-    /* Hero Banner */
-    .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 80px 5%; text-align: center; }
-    .hero h2 { font-size: 38px; font-weight: 800; margin-bottom: 16px; color: #ffffff; }
-    .hero p { font-size: 18px; color: #cbd5e1; max-width: 700px; margin: 0 auto 30px auto; }
-    .hero-badges { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
-    .badge-item { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px; font-size: 14px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
-
-    /* Container Principal */
-    .section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
-    .section-title { text-align: center; font-size: 28px; color: #0f172a; margin-bottom: 40px; position: relative; font-weight: 700; }
-    .section-title::after { content: ''; width: 60px; height: 4px; background: #0284c7; display: block; margin: 10px auto 0 auto; border-radius: 2px; }
-
-    /* Grid de Serviços */
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-    .service-card { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; }
-    .service-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); }
-    .service-icon { font-size: 36px; margin-bottom: 15px; display: inline-block; }
-    .service-card h3 { font-size: 20px; color: #0f172a; margin-bottom: 10px; }
-    .service-card p { font-size: 14px; color: #64748b; }
-
-    /* Quem Somos */
-    .about-box { background: white; border-radius: 12px; padding: 40px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-    @media (max-width: 768px) { .about-box { grid-template-columns: 1fr; } }
-    .about-text h3 { font-size: 24px; color: #0f172a; margin-bottom: 15px; }
-    .about-text p { color: #475569; margin-bottom: 15px; font-size: 15px; }
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; }
-    .stat-card { background: #f1f5f9; padding: 20px; border-radius: 8px; }
-    .stat-number { font-size: 32px; font-weight: 800; color: #0284c7; }
-    .stat-label { font-size: 13px; color: #64748b; font-weight: 600; }
-
-    /* Seção do Formulário de Chamado */
-    .ticket-section { background: #f1f5f9; padding: 60px 5%; }
-    .form-container { background: white; max-width: 650px; margin: 0 auto; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #334155; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; background: #f8fafc; transition: border-color 0.2s, background 0.2s; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #0284c7; background: #fff; }
-    .btn-submit { background: #0284c7; color: white; border: none; padding: 14px; width: 100%; font-size: 16px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
-    .btn-submit:hover { background: #0369a1; }
-
-    /* Rodapé */
-    footer { background: #0f172a; color: #94a3b8; padding: 40px 5% 20px 5%; text-align: center; font-size: 14px; border-top: 1px solid #1e293b; }
-    footer strong { color: #f1f5f9; }
+    .bg-hero {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 27, 75, 0.88) 100%), 
+                  url('https://climario.maisresultadodigital.com.br/wp-content/uploads/2025/11/Qual-modo-de-ar-condicionado-gela-mais.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .card-3d {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-3d:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-card {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+    }
+    .brand-img-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 1rem;
+      padding: 0.75rem 1.25rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .main-logo {
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+    }
+    @media (min-width: 640px) {
+      .main-logo {
+        height: 60px;
+      }
+    }
   </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 font-sans overflow-x-hidden antialiased flex flex-col min-h-screen">
 
-  <!-- Topbar -->
-  <header>
-    <div class="logo-container">
-      <h1>WORLD CLIMATIZAÇÃO</h1>
-      <p>Mais de 30 anos de tradição</p>
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center gap-2">
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a href="#" class="flex items-center py-1">
+          <img src="logo.png" alt="World Ar Ar Condicionado" class="main-logo">
+        </a>
+        <span class="text-[9px] sm:text-[10px] bg-indigo-950/80 text-indigo-300 border border-indigo-800/60 font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full uppercase tracking-wider">30+ Anos</span>
+      </div>
+
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+        <a href="#sobre" class="hover:text-cyan-400 transition">Sobre Nós</a>
+        <a href="#credenciados" class="hover:text-cyan-400 transition">Marcas Autorizadas</a>
+        <a href="#servicos" class="hover:text-cyan-400 transition">Serviços</a>
+      </nav>
+
+      <button onclick="openTicketModal()" class="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-semibold text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl shadow-lg transition">
+        Abrir Chamado
+      </button>
     </div>
-    <nav>
-      <a href="#servicos">Serviços</a>
-      <a href="#sobre">A Empresa</a>
-      <a href="#chamado" class="btn-nav">Abrir Chamado</a>
-    </nav>
   </header>
 
-  <!-- Banner Comercial -->
-  <section class="hero">
-    <h2>Especialistas em Conforto Térmico & Climatização</h2>
-    <p>Atendimento residencial, comercial e industrial com excelência, agilidade e garantia de serviço.</p>
-    <div class="hero-badges">
-      <div class="badge-item">❄️ Instalação & Manutenção</div>
-      <div class="badge-item">🛡️ Equipe Qualificada</div>
-      <div class="badge-item">⭐ +30 Anos no Mercado</div>
-    </div>
-  </section>
-
-  <!-- Nossos Serviços -->
-  <section class="section" id="servicos">
-    <h2 class="section-title">Nossos Serviços</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">🛠️</div>
-        <h3>Instalação Especializada</h3>
-        <p>Projetos e instalação de equipamentos de ar condicionado de todos os portes e marcas com máxima eficiência energética.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🔧</div>
-        <h3>Manutenção Preventiva e Corretiva</h3>
-        <p>Diagnóstico preciso e conserto ágil para garantir o pleno funcionamento do seu sistema sem surpresas.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">✨</div>
-        <h3>Higienização Química Antibacteriana</h3>
-        <p>Limpeza profunda do sistema para eliminação de fungos, bactérias e melhora direta da qualidade do ar respirado.</p>
+  <!-- HERO SECTION -->
+  <section class="bg-hero text-white py-20 sm:py-32 px-4 sm:px-6 text-center relative overflow-hidden flex items-center min-h-[75vh] sm:min-h-[85vh]">
+    <div class="max-w-4xl mx-auto" data-aos="zoom-out" data-aos-duration="800">
+      <span class="bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] sm:text-xs font-semibold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full uppercase tracking-widest inline-block mb-4 sm:mb-6">Tradição &amp; Alta Performance</span>
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
+        Engenharia e Soluções em <span class="text-gradient">Climatização</span>
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-lg md:text-xl mt-4 sm:mt-6 max-w-2xl mx-auto font-normal leading-relaxed">
+        Há mais de três décadas liderando a instalação, manutenção e consultoria técnica de condicionadores de ar corporativos e residenciais.
+      </p>
+      <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="openTicketModal()" class="bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-base transition duration-300 shadow-xl active:scale-95">
+          <i class="fa-solid fa-headset mr-2"></i> Solicitar Atendimento
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- Quem Somos -->
-  <section class="section" id="sobre">
-    <div class="about-box">
-      <div class="about-text">
-        <h3>Tradição e Compromisso com o Cliente</h3>
-        <p>A World Climatização atua há mais de 30 anos oferecendo soluções completas em sistemas de ar condicionado e climatização de ambientes.</p>
-        <p>Nossa missão é entregar atendimento transparente, suporte técnico ágil e execução impecável para residências, escritórios e indústrias.</p>
+  <!-- MARCAS CREDENCIADAS -->
+  <section id="credenciados" class="py-16 sm:py-24 bg-slate-950 border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 sm:mb-16" data-aos="fade-up">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">Credenciamento Oficial</h2>
+        <p class="text-slate-400 mt-2 text-xs sm:text-sm max-w-xl mx-auto">Garantimos o selo original de fábrica em todos os procedimentos.</p>
       </div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number">+30</div>
-          <div class="stat-label">Anos de História</div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <!-- Daikin -->
+        <div class="card-3d brand-card p-6 sm:p-8 rounded-2xl border border-slate-800/80 flex flex-col items-center text-center" data-aos="fade-up">
+          <div class="brand-img-container h-16 sm:h-20 w-full flex items-center justify-center mb-4 sm:mb-6">
+            <img src="https://1000logos.net/wp-content/uploads/2020/08/Daikin-Logo.png" alt="Daikin" class="max-h-10 sm:max-h-12 max-w-[130px] sm:max-w-[150px] object-contain" referrerpolicy="no-referrer">
+          </div>
+          <span class="bg-cyan-950/80 border border-cyan-800/50 text-cyan-300 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full mb-3">Eficiência Energética</span>
+          <p class="text-slate-400 text-xs leading-relaxed">Tecnologia japonesa de ponta e máxima economia de energia.</p>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Garantia Técnica</div>
+
+        <!-- Fujitsu -->
+        <div class="card-3d brand-card p-6 sm:p-8 rounded-2xl border border-slate-800/80 flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay="100">
+          <div class="brand-img-container h-16 sm:h-20 w-full flex items-center justify-center mb-4 sm:mb-6">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Fujitsu-Logo.svg" alt="Fujitsu" class="max-h-10 sm:max-h-12 max-w-[130px] sm:max-w-[150px] object-contain" referrerpolicy="no-referrer">
+          </div>
+          <span class="bg-rose-950/80 border border-rose-800/50 text-rose-300 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full mb-3">Conforto Acústico</span>
+          <p class="text-slate-400 text-xs leading-relaxed">Funcionamento ultrasilencioso e alta capacidade térmica.</p>
+        </div>
+
+        <!-- Midea -->
+        <div class="card-3d brand-card p-6 sm:p-8 rounded-2xl border border-slate-800/80 flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="brand-img-container h-16 sm:h-20 w-full flex items-center justify-center mb-4 sm:mb-6">
+            <img src="https://banner2.cleanpng.com/20180629/xwb/kisspng-midea-home-appliance-air-conditioning-business-maj-midea-5b36a43c3fdae9.6151288715303076442616.jpg" alt="Midea" class="max-h-10 sm:max-h-12 max-w-[130px] sm:max-w-[150px] object-contain" referrerpolicy="no-referrer">
+          </div>
+          <span class="bg-teal-950/80 border border-teal-800/50 text-teal-300 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full mb-3">Conectividade &amp; Inovação</span>
+          <p class="text-slate-400 text-xs leading-relaxed">Sistemas inteligentes com integração IoT e Wi-Fi.</p>
+        </div>
+
+        <!-- LG -->
+        <div class="card-3d brand-card p-6 sm:p-8 rounded-2xl border border-slate-800/80 flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay="300">
+          <div class="brand-img-container h-16 sm:h-20 w-full flex items-center justify-center mb-4 sm:mb-6">
+            <img src="https://pngimg.com/uploads/lg_logo/lg_logo_PNG21.png" alt="LG" class="max-h-10 sm:max-h-12 max-w-[130px] sm:max-w-[150px] object-contain" referrerpolicy="no-referrer">
+          </div>
+          <span class="bg-indigo-950/80 border border-indigo-800/50 text-indigo-300 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full mb-3">Dual Inverter</span>
+          <p class="text-slate-400 text-xs leading-relaxed">Refrigeração ultrarrápida e altíssima estabilidade.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Formulário de Abertura de Chamado -->
-  <section class="ticket-section" id="chamado">
-    <h2 class="section-title">Abrir Chamado Técnico</h2>
-    <div class="form-container">
-      <form id="ticketForm">
-        <div class="form-group">
-          <label for="clientName">Nome Completo</label>
-          <input type="text" id="clientName" placeholder="Ex: Gabriel Mendonça" required>
+  <!-- SOBRE NÓS -->
+  <section id="sobre" class="py-16 sm:py-24 bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
+      <div data-aos="fade-right">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Solidez em Três Décadas</h2>
+        <p class="text-slate-300 text-sm sm:text-base mb-6 leading-relaxed font-light">
+          A <strong class="text-white font-semibold">World Ar</strong> opera desde o planejamento técnico até a execução final de projetos de climatização, garantindo ambientes seguros e energeticamente eficientes.
+        </p>
+        <div class="grid grid-cols-2 gap-4 sm:gap-6">
+          <div class="bg-slate-800/80 p-4 sm:p-6 rounded-2xl border border-slate-700/60 shadow-lg text-center sm:text-left">
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-gradient">30+</h3>
+            <p class="text-slate-400 text-[10px] sm:text-xs font-medium uppercase tracking-wider mt-1">Anos no Mercado</p>
+          </div>
+          <div class="bg-slate-800/80 p-4 sm:p-6 rounded-2xl border border-slate-700/60 shadow-lg text-center sm:text-left">
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-gradient">10k+</h3>
+            <p class="text-slate-400 text-[10px] sm:text-xs font-medium uppercase tracking-wider mt-1">Projetos Atendidos</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-slate-800/60 p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-700/50 shadow-xl" data-aos="fade-left">
+        <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">Diferenciais Operacionais</h3>
+        <ul class="space-y-3 sm:space-y-4">
+          <li class="flex items-start gap-3 text-slate-300 text-xs sm:text-sm">
+            <div class="w-5 h-5 rounded bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
+              <i class="fa-solid fa-check text-[10px]"></i>
+            </div>
+            Corpo técnico certificado pelas fábricas.
+          </li>
+          <li class="flex items-start gap-3 text-slate-300 text-xs sm:text-sm">
+            <div class="w-5 h-5 rounded bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
+              <i class="fa-solid fa-check text-[10px]"></i>
+            </div>
+            Laudos técnicos e conformidade com normas (PMOC).
+          </li>
+          <li class="flex items-start gap-3 text-slate-300 text-xs sm:text-sm">
+            <div class="w-5 h-5 rounded bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
+              <i class="fa-solid fa-check text-[10px]"></i>
+            </div>
+            Atendimento agilizado para chamados emergenciais.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos" class="py-16 sm:py-24 bg-slate-950 border-t border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-12 sm:mb-16" data-aos="fade-up">Especialidades Técnicas</h2>
+      
+      <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
+        <!-- Card 1 -->
+        <div class="bg-slate-900/90 p-6 sm:p-8 rounded-2xl border border-slate-800 text-left" data-aos="fade-up">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-cyan-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl mb-4 sm:mb-6">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+          </div>
+          <h3 class="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Instalação Credenciada</h3>
+          <p class="text-slate-400 text-xs leading-relaxed mb-6">Infraestrutura completa preservando a garantia de fábrica.</p>
+          <button onclick="openTicketModal('Instalação')" class="text-cyan-400 font-semibold text-xs sm:text-sm hover:text-cyan-300 inline-flex items-center gap-2">Solicitar Orçamento <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
         </div>
 
-        <div class="form-group">
-          <label for="clientPhone">WhatsApp / Telefone</label>
-          <input type="tel" id="clientPhone" placeholder="(21) 90000-0000" required>
+        <!-- Card 2 -->
+        <div class="bg-slate-900/90 p-6 sm:p-8 rounded-2xl border border-slate-800 text-left" data-aos="fade-up" data-aos-delay="100">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-cyan-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl mb-4 sm:mb-6">
+            <i class="fa-solid fa-gears"></i>
+          </div>
+          <h3 class="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Manutenção &amp; Higienização</h3>
+          <p class="text-slate-400 text-xs leading-relaxed mb-6">Preventiva, higienização profunda e carga de fluido refrigerante.</p>
+          <button onclick="openTicketModal('Manutenção')" class="text-cyan-400 font-semibold text-xs sm:text-sm hover:text-cyan-300 inline-flex items-center gap-2">Agendar Manutenção <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
         </div>
 
-        <div class="form-group">
-          <label for="address">Endereço Completo</label>
-          <input type="text" id="address" placeholder="Rua, número, bairro e cidade" required>
+        <!-- Card 3 -->
+        <div class="bg-slate-900/90 p-6 sm:p-8 rounded-2xl border border-slate-800 text-left" data-aos="fade-up" data-aos-delay="200">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-cyan-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl mb-4 sm:mb-6">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <h3 class="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Venda de Equipamentos</h3>
+          <p class="text-slate-400 text-xs leading-relaxed mb-6">Consultoria para escolha do modelo ideal para o ambiente.</p>
+          <button onclick="openTicketModal('Compra de Aparelho')" class="text-cyan-400 font-semibold text-xs sm:text-sm hover:text-cyan-300 inline-flex items-center gap-2">Consultar Aparelhos <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RODAPÉ COMPLETO -->
+  <footer class="mt-auto bg-slate-950 border-t border-slate-800/80 pt-12 sm:pt-16 pb-8 sm:pb-12 text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
+      
+      <!-- Coluna 1: Identidade da Marca -->
+      <div class="space-y-3">
+        <a href="#" class="inline-block">
+          <img src="logo.png" alt="World Ar Ar Condicionado" class="main-logo">
+        </a>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Sua especialista em ar-condicionado residencial e corporativo há mais de 30 anos no Distrito Federal.
+        </p>
+      </div>
+
+      <!-- Coluna 2: Endereço -->
+      <div class="space-y-2">
+        <h4 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-cyan-400"></i> Endereço
+        </h4>
+        <p class="text-xs leading-relaxed text-slate-300">
+          St. de Habitações Coletivas e Geminadas Norte 710<br>
+          Asa Norte, Brasília - DF | CEP: 70750-536
+        </p>
+      </div>
+
+      <!-- Coluna 3: Contato -->
+      <div class="space-y-2">
+        <h4 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-phone text-cyan-400"></i> Atendimento
+        </h4>
+        <p class="text-xs text-slate-300 flex items-center gap-2">
+          <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+          <a href="https://wa.me/5561999089125" target="_blank" class="hover:text-cyan-400 transition font-medium">(61) 99908-9125</a>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-8 sm:mt-12 pt-6 border-t border-slate-800/60 text-center text-[10px] sm:text-[11px] text-slate-500">
+      &copy; World Ar - Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <!-- MODAL DE SISTEMA DE CHAMADO -->
+  <div id="ticketModal" class="fixed inset-0 bg-slate-950/80 hidden items-center justify-center z-50 p-4 backdrop-blur-md">
+    <div class="bg-slate-900 border border-slate-800 text-slate-100 w-full max-w-lg rounded-2xl sm:rounded-3xl shadow-2xl p-5 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeTicketModal()" class="absolute top-4 right-4 sm:top-5 sm:right-5 text-slate-400 hover:text-white text-base sm:text-lg p-2">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">Abertura de Chamado</h3>
+      <p class="text-slate-400 text-xs mb-4 sm:mb-6">Informe seus dados para direcionamento técnico.</p>
+
+      <form id="ticketForm" onsubmit="handleTicketSubmit(event)" class="space-y-3 sm:space-y-4">
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Nome Completo</label>
+          <input type="text" id="clientName" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
         </div>
 
-        <div class="form-group">
-          <label for="serviceType">Tipo de Serviço</label>
-          <select id="serviceType" required>
-            <option value="">Selecione o serviço...</option>
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Telefone / WhatsApp</label>
+          <input type="tel" id="clientPhone" placeholder="(61) 99908-9125" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
+        </div>
+
+        <!-- NOVO CAMPO: ENDEREÇO COMPLETO -->
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Endereço Completo</label>
+          <input type="text" id="address" placeholder="Rua, número, bairro, cidade" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Tipo de Serviço</label>
+          <select id="serviceType" required class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm">
             <option value="Instalação">Instalação</option>
-            <option value="Manutenção / Conserto">Manutenção / Conserto</option>
-            <option value="Higienização">Higienização</option>
+            <option value="Manutenção">Manutenção</option>
+            <option value="Compra de Aparelho">Comprar Aparelho</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="description">Descrição da Solicitação / Problema</label>
-          <textarea id="description" rows="4" placeholder="Descreva o que está acontecendo com o equipamento..."></textarea>
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Descrição</label>
+          <textarea id="serviceDesc" rows="3" placeholder="Descreva brevemente..." class="w-full px-3.5 py-2.5 sm:py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:ring-2 focus:ring-cyan-500 outline-none text-xs sm:text-sm"></textarea>
         </div>
 
-        <button type="submit" class="btn-submit">Enviar Solicitação de Chamado</button>
+        <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 text-white font-bold py-3 sm:py-3.5 rounded-xl shadow-lg transition text-xs sm:text-sm mt-2">
+          Enviar Chamado
+        </button>
       </form>
     </div>
-  </section>
+  </div>
 
-  <!-- Rodapé -->
-  <footer>
-    <p><strong>World Climatização</strong> — Excelência em Serviços Térmicos</p>
-    <p style="margin-top: 8px; font-size: 12px;">© Todos os direitos reservados.</p>
-  </footer>
-
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script>
-    document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+    AOS.init({ duration: 800, once: true, offset: 40 });
+
+    const WHATSAPP_NUMBER = "5561999089125";
+
+    function openTicketModal(service = 'Instalação') {
+      document.getElementById('serviceType').value = service;
+      document.getElementById('ticketModal').classList.remove('hidden');
+      document.getElementById('ticketModal').classList.add('flex');
+    }
+
+    function closeTicketModal() {
+      document.getElementById('ticketModal').classList.add('hidden');
+      document.getElementById('ticketModal').classList.remove('flex');
+    }
+
+    async function handleTicketSubmit(e) {
       e.preventDefault();
-      const payload = {
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Registrando...";
+
+      const ticketData = {
         clientName: document.getElementById('clientName').value,
         clientPhone: document.getElementById('clientPhone').value,
         address: document.getElementById('address').value,
         serviceType: document.getElementById('serviceType').value,
-        description: document.getElementById('description').value
+        description: document.getElementById('serviceDesc').value
       };
 
       try {
-        const res = await fetch('/api/tickets', {
+        const response = await fetch('/api/tickets', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          headers: { 
+            'Content-Type': 'application/json; charset=utf-8' 
+          },
+          body: JSON.stringify(ticketData)
         });
 
-        if (res.ok) {
-          alert('Chamado enviado com sucesso! Nossa equipe entrará em contato em breve.');
-          document.getElementById('ticketForm').reset();
-        } else {
-          alert('Erro ao enviar o chamado. Tente novamente.');
-        }
+        if (!response.ok) throw new Error('Falha no salvamento');
+
+        const text = `*NOVO CHAMADO - WORLD AR*%0A%0A` +
+                     `*Nome:* ${encodeURIComponent(ticketData.clientName)}%0A` +
+                     `*Telefone:* ${encodeURIComponent(ticketData.clientPhone)}%0A` +
+                     `*Endereco:* ${encodeURIComponent(ticketData.address)}%0A` +
+                     `*Tipo de Servico:* ${encodeURIComponent(ticketData.serviceType)}%0A` +
+                     `*Observacoes:* ${encodeURIComponent(ticketData.description || 'Nenhuma')}`;
+
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
+        
+        alert('Chamado registrado com sucesso!');
+        document.getElementById('ticketForm').reset();
+        closeTicketModal();
       } catch (err) {
-        alert('Erro de conexão com o servidor.');
+        alert('Erro ao registrar chamado. Verifique a conexão.');
+        console.error(err);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Enviar Chamado";
       }
-    });
+    }
   </script>
 </body>
 </html>
