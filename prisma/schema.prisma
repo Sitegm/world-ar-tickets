@@ -1,1 +1,19 @@
-datasource db {`n  provider = "postgresql"`n  url      = env("DATABASE_URL")`n}`n`ngenerator client {`n  provider = "prisma-client-js"`n}`n`nmodel Ticket {`n  id          Int      @id @default(autoincrement())`n  clientName  String`n  clientPhone String`n  address     String?`n  serviceType String`n  description String?`n  status      String   @default("Pendente")`n  createdAt   DateTime @default(now())`n}
+﻿datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Ticket {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  clientPhone String
+  address     String?
+  serviceType String
+  description String?
+  status      String   @default("Pendente")
+  createdAt   DateTime @default(now())
+}
