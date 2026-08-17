@@ -8,12 +8,17 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
     .container { max-width: 1100px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #1e293b; margin-bottom: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #1e293b; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .btn { background: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     .btn:hover { background: #4338ca; }
     .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; margin-left: 6px; }
     .btn-delete:hover { background: #dc2626; }
     
+    /* ALERTA DE ÁUDIO & STATUS DE MONITORAMENTO */
+    .audio-banner { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #93c5fd; padding: 10px 14px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; }
+    .pulse-dot { height: 8px; width: 8px; background-color: #10b981; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #10b981; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
     /* CARTÕES DOS CONTADORES */
     .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
     .card { background: #020617; border: 1px solid #1e293b; padding: 15px; border-radius: 12px; }
@@ -43,7 +48,16 @@
   <div class="container">
     <div class="header">
       <h2>Painel de Gerenciamento de Chamados</h2>
-      <button onclick="loadTickets()" class="btn">Atualizar Lista</button>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button onclick="playNotificationSound()" class="btn" style="background: #334155;">🔔 Testar Som</button>
+        <button onclick="loadTickets()" class="btn">Atualizar Lista</button>
+      </div>
+    </div>
+
+    <!-- BANNER DE STATUS DE MONITORAMENTO -->
+    <div class="audio-banner">
+      <span><span class="pulse-dot"></span> Monitoramento em tempo real ativo (Verificando a cada 10s)</span>
+      <small style="color: #64748b;">Clique em qualquer lugar da tela para habilitar o áudio do navegador.</small>
     </div>
 
     <!-- CARTÕES DE CONTADORES -->
@@ -91,6 +105,38 @@
   </div>
 
   <script>
+    let previousTicketCount = null;
+
+    // GERADOR DE SOM VIA WEB AUDIO API (Duplo Bip Suave de Notificação)
+    function playNotificationSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function createBeep(freq, startTime, duration) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, startTime);
+          
+          gain.gain.setValueAtTime(0.3, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+          
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc.start(startTime);
+          osc.stop(startTime + duration);
+        }
+
+        const now = audioCtx.currentTime;
+        createBeep(880, now, 0.15);       // Primeiro som (Tom A5)
+        createBeep(1200, now + 0.18, 0.3); // Segundo som mais alto (Tom D6)
+      } catch (e) {
+        console.error("Permissão de áudio pendente pelo navegador:", e);
+      }
+    }
+
     async function loadTickets() {
       try {
         const res = await fetch('/api/tickets');
@@ -101,6 +147,12 @@
           tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #ef4444;">Erro ao carregar dados do servidor.</td></tr>';
           return;
         }
+
+        // TOCAR ALERTA APENAS SE CHEGAR UM NOVO CHAMADO
+        if (previousTicketCount !== null && tickets.length > previousTicketCount) {
+          playNotificationSound();
+        }
+        previousTicketCount = tickets.length;
 
         // Atualizar Contadores
         const pending = tickets.filter(t => t.status === 'PENDING').length;
@@ -123,17 +175,14 @@
           else if (t.status === 'IN_PROGRESS') statusBadge = '<span class="badge badge-progress">Em Andamento</span>';
           else statusBadge = '<span class="badge badge-completed">Concluído</span>';
 
-          const addressText = t.address || '-';
-          const descText = t.description || '-';
-
           return `
             <tr>
               <td style="font-family: monospace; color: #94a3b8;">#${t.id}</td>
               <td style="font-weight: bold; color: #fff;">${t.clientName}</td>
               <td>${t.clientPhone}</td>
-              <td style="color: #cbd5e1;">${addressText}</td>
+              <td style="color: #cbd5e1;">${t.address || '-'}</td>
               <td style="color: #38bdf8;">${t.serviceType}</td>
-              <td style="color: #94a3b8; font-size: 12px;">${descText}</td>
+              <td style="color: #94a3b8; font-size: 12px;">${t.description || '-'}</td>
               <td>${statusBadge}</td>
               <td>
                 <div class="actions-cell">
@@ -201,7 +250,11 @@
       }
     }
 
+    // Carregamento inicial
     loadTickets();
+
+    // Atualização Automática (Polling a cada 10 segundos)
+    setInterval(loadTickets, 10000);
   </script>
 </body>
 </html>
